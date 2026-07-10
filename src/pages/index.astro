@@ -269,6 +269,24 @@ import socialLinks from '../data/social-links.json';
     fill: currentColor;
   }
 
+  @media (max-width: 640px) {
+    .matcha-tooltip {
+      position: fixed;
+      left: 50%;
+      right: auto;
+      top: auto;
+      bottom: 1.25rem;
+      width: calc(100vw - 2.5rem);
+      max-width: 320px;
+      transform: translateX(-50%) translateY(8px);
+    }
+
+    .matcha-hover-zone:hover .matcha-tooltip,
+    .matcha-hover-zone:focus-visible .matcha-tooltip {
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
   @media (max-width: 380px) {
     main {
       padding: 1.5rem 1rem 1.8rem;
