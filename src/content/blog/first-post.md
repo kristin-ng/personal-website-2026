@@ -1,5 +1,5 @@
 ---
-title: 'Hello World'
+title: 'hello world'
 description: 'my goal for this site and projects'
 pubDate: 'Jul 05 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'

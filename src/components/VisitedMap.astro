@@ -1,0 +1,111 @@
+---
+import visitedCountries from '../data/visited-countries.json';
+import 'jsvectormap/dist/jsvectormap.min.css';
+---
+
+<div class="visited-map">
+	<h3>Places I've been</h3>
+	<p class="map-count">{visitedCountries.length} countries visited</p>
+	<div id="visited-map" class="map-canvas" data-countries={JSON.stringify(visitedCountries)}></div>
+</div>
+
+<script>
+	import jsVectorMap from 'jsvectormap';
+	import 'jsvectormap/dist/maps/world.js';
+
+	const mapEl = document.getElementById('visited-map');
+	const visitedCountries = JSON.parse(mapEl.dataset.countries);
+	const lookup = Object.fromEntries(visitedCountries.map((c) => [c.code, c]));
+	const isMobile = window.innerWidth < 640;
+
+	new jsVectorMap({
+		selector: '#visited-map',
+		map: 'world',
+		backgroundColor: 'transparent',
+		zoomButtons: true,
+		zoomOnScroll: false,
+		bindTouchEvents: true,
+		draggable: !isMobile,
+		regionsSelectable: false,
+		selectedRegions: visitedCountries.map((c) => c.code),
+		regionStyle: {
+			initial: { fill: 'rgba(96, 115, 159, 0.22)', stroke: '#faf9f7', strokeWidth: 0.5 },
+			selected: { fill: '#2337ff' },
+			hover: { fill: 'rgba(35, 55, 255, 0.65)' },
+		},
+		onRegionTooltipShow(event, tooltip, code) {
+			const entry = lookup[code];
+			const el = tooltip.getElement();
+			if (entry) {
+				el.classList.add('tooltip-visited');
+				el.classList.remove('tooltip-unvisited');
+				tooltip.text(`<strong>${entry.name}</strong>`, true);
+			} else {
+				el.classList.add('tooltip-unvisited');
+				el.classList.remove('tooltip-visited');
+			}
+		},
+	});
+</script>
+
+<style>
+	.visited-map {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 2.5rem 2rem 3rem;
+		text-align: center;
+	}
+
+	.visited-map h3 {
+		font-size: 1.3rem;
+		font-weight: 600;
+		color: rgb(15, 18, 25);
+		margin: 0 0 0.3rem;
+	}
+
+	.map-count {
+		font-size: 0.9rem;
+		color: rgb(96, 115, 159);
+		margin: 0 0 1.2rem;
+	}
+
+	.map-canvas {
+		width: 100%;
+		height: 340px;
+		border-radius: 12px;
+		background: rgba(96, 115, 159, 0.06);
+	}
+
+	/* jsvectormap appends the tooltip/zoom buttons directly to <body>,
+	   outside this component's DOM, so these must be unscoped globals. */
+	:global(.jvm-tooltip) {
+		border-radius: 6px;
+		font-size: 0.8rem;
+		padding: 0.4rem 0.6rem;
+	}
+
+	:global(.jvm-tooltip.tooltip-visited) {
+		background: #2337ff !important;
+		color: #faf9f7 !important;
+	}
+
+	:global(.jvm-tooltip.tooltip-unvisited) {
+		background: rgb(229, 233, 240) !important;
+		color: #2337ff !important;
+	}
+
+	:global(.jvm-zoom-btn) {
+		background: rgba(15, 18, 25, 0.85);
+		color: #faf9f7;
+	}
+
+	@media (max-width: 640px) {
+		.visited-map {
+			padding: 2rem 1rem 2.5rem;
+		}
+
+		.map-canvas {
+			height: 240px;
+		}
+	}
+</style>

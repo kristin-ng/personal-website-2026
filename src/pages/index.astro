@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import VisitedMap from '../components/VisitedMap.astro';
 import { Image } from 'astro:assets';
 import cafeImage from '../assets/cafe.png';
 ---
@@ -12,53 +13,80 @@ import cafeImage from '../assets/cafe.png';
     <BaseHead title="Kristin Ng" description="Curious. Relentless. Lifelong learner." />
   </head>
   <body>
-    <Header />
-    <div class="hero-image">
-      <Image
-        src={cafeImage}
-        alt="Cozy cafe workspace with books, bicycle, and coffee"
-        width={1400}
-      />
-      <div class="matcha-hover-zone" tabindex="0" aria-label="Matcha recipe">
-        <div class="matcha-tooltip">
-          <strong>Simple Matcha Recipe</strong>
-          <ul>
-            <li>Sift 3g matcha powder</li>
-            <li>Add 30g of 80&deg;C water</li>
-            <li>Swirl the bowl and cover the matcha with water</li>
-            <li>Whisk in an M shape motion until foam appears</li>
-            <li>[optional] add sweetener and whisk</li>
-            <li>Add to milk</li>
-            <li>Enjoy!</li>
-          </ul>
+    <div class="viewport-hero">
+      <Header />
+      <div class="hero-image">
+        <Image
+          src={cafeImage}
+          alt="Cozy cafe workspace with books, bicycle, and coffee"
+          width={1400}
+        />
+        <div class="matcha-hover-zone" tabindex="0" aria-label="Matcha recipe">
+          <div class="matcha-tooltip">
+            <strong>Simple Matcha Recipe</strong>
+            <ul>
+              <li>Sift 3g matcha powder</li>
+              <li>Add 30g of 80&deg;C water</li>
+              <li>Swirl the bowl and cover the matcha with water</li>
+              <li>Whisk in an M shape motion until foam appears</li>
+              <li>[optional] add sweetener and whisk</li>
+              <li>Add to milk</li>
+              <li>Enjoy!</li>
+            </ul>
+          </div>
         </div>
       </div>
+
+      <main>
+        <h1>Kristin Ng</h1>
+        <p class="tagline">Curious. Relentless. Lifelong learner.</p>
+        <p class="description">
+          My goal is to be comfortable in discomfort. That's where most growth happens.
+        </p>
+
+        <div class="location">
+          <h3>Where is Kristin?</h3>
+          <a href="https://www.google.com/maps/place/New+York,+NY" target="_blank" rel="noopener noreferrer">📍NYC</a>
+        </div>
+      </main>
     </div>
 
-    <main>
-      <h1>Kristin Ng</h1>
-      <p class="tagline">Curious. Relentless. Lifelong learner.</p>
-      <p class="description">
-        My goal is to be comfortable in discomfort. That's where most growth happens.
-      </p>
+    <section class="map-section">
+      <VisitedMap />
+    </section>
 
+    <section class="social-section">
       <SocialLinks />
-    </main>
+    </section>
   </body>
 </html>
 
 <style>
   html, body {
-    height: 100dvh;
-    overflow: hidden;
     margin: 0;
     padding: 0;
   }
 
   body {
     background: #faf9f7;
+  }
+
+  .viewport-hero {
+    height: 100dvh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+  .map-section {
+    background: #faf9f7;
+  }
+
+  .social-section {
+    background: #faf9f7;
+    display: flex;
+    justify-content: center;
+    padding: 0 2rem 3rem;
   }
 
   .hero-image {
@@ -166,6 +194,27 @@ import cafeImage from '../assets/cafe.png';
     max-width: 40rem;
     margin: 0 auto 1.8rem;
     line-height: 1.5;
+  }
+
+  .location {
+    margin: 0 0 1.2rem;
+  }
+
+  .location h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(15, 18, 25);
+    margin: 0 0 0.3rem;
+  }
+
+  .location a {
+    font-size: 0.95rem;
+    color: rgb(96, 115, 159);
+    text-decoration: none;
+  }
+
+  .location a:hover {
+    text-decoration: underline;
   }
 
   @media (max-width: 640px) {
