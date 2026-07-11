@@ -1,10 +1,30 @@
 ---
+import { execSync } from 'node:child_process';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import VisitedMap from '../components/VisitedMap.astro';
 import { Image } from 'astro:assets';
 import cafeImage from '../assets/cafe.png';
+import location from '../data/location.json';
+
+let locationUpdatedAt: string | null = null;
+try {
+  const isoDate = execSync('git log -1 --format=%cI -- src/data/location.json', {
+    cwd: new URL('../../', import.meta.url),
+  })
+    .toString()
+    .trim();
+  if (isoDate) {
+    locationUpdatedAt = new Date(isoDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
+} catch {
+  locationUpdatedAt = null;
+}
 ---
 
 <!doctype html>
@@ -46,7 +66,8 @@ import cafeImage from '../assets/cafe.png';
 
         <div class="location">
           <h3>Where is Kristin?</h3>
-          <a href="https://www.google.com/maps/place/New+York,+NY" target="_blank" rel="noopener noreferrer">📍NYC</a>
+          <a href={`https://www.google.com/maps/place/${location.mapQuery}`} target="_blank" rel="noopener noreferrer">📍{location.city}</a>
+          {locationUpdatedAt && <span class="location-updated">Last updated {locationUpdatedAt}</span>}
         </div>
       </main>
     </div>
@@ -215,6 +236,13 @@ import cafeImage from '../assets/cafe.png';
 
   .location a:hover {
     text-decoration: underline;
+  }
+
+  .location-updated {
+    display: block;
+    font-size: 0.75rem;
+    color: rgb(140, 148, 163);
+    margin-top: 0.2rem;
   }
 
   @media (max-width: 640px) {
