@@ -11,7 +11,7 @@ import location from '../data/location.json';
 let locationUpdatedAt: string | null = null;
 try {
   const isoDate = execSync('git log -1 --format=%cI -- src/data/location.json', {
-    cwd: new URL('../../', import.meta.url),
+    cwd: process.cwd(),
   })
     .toString()
     .trim();
