@@ -26,5 +26,6 @@
   { "code": "CZ", "name": "Czech Republic" },
   { "code": "RO", "name": "Romania" },
   { "code": "BG", "name": "Bulgaria" },
-  { "code": "TR", "name": "Turkey" }
+  { "code": "TR", "name": "Turkey" },
+  { "code": "FR", "name": "France" },
 ]
