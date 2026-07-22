@@ -28,5 +28,6 @@
   { "code": "BG", "name": "Bulgaria" },
   { "code": "TR", "name": "Turkey" },
   { "code": "FR", "name": "France" }, 
-  { "code": "UZ", "name": "Uzbekistan" }
+  { "code": "UZ", "name": "Uzbekistan" },
+  { "code": "TJ", "name": "Tajikistan" }
 ]
