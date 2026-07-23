@@ -5,6 +5,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import StatusDot from '../../components/StatusDot.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const projects = (await getCollection('projects')).sort(
@@ -31,7 +32,12 @@ const projects = (await getCollection('projects')).sort(
 				padding: 0;
 			}
 			ul li {
+				display: flex;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 1rem;
 				width: 100%;
+				padding: 1.25rem 0;
 				border-bottom: 1px solid rgb(var(--gray-light));
 			}
 			ul li:last-child {
@@ -41,11 +47,10 @@ const projects = (await getCollection('projects')).sort(
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li a {
+			.project-link {
 				display: flex;
 				align-items: center;
 				gap: 1.5rem;
-				padding: 1.25rem 0;
 			}
 			ul li img {
 				width: 120px;
@@ -63,14 +68,33 @@ const projects = (await getCollection('projects')).sort(
 				margin: 0;
 				color: rgb(var(--gray));
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
+			.project-link:hover .title,
+			.project-link:hover .date {
+				color: rgb(var(--accent));
+			}
+			.meta {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				gap: 0.4rem;
+				margin-left: auto;
+				flex-shrink: 0;
+			}
+			.see-updates {
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+				white-space: nowrap;
+			}
+			.see-updates:hover {
 				color: rgb(var(--accent));
 			}
 			@media (max-width: 720px) {
-				ul li a {
-					gap: 1rem;
+				ul li {
+					gap: 0.75rem;
 					padding: 1rem 0;
+				}
+				.project-link {
+					gap: 1rem;
 				}
 				ul li img {
 					width: 80px;
@@ -87,7 +111,12 @@ const projects = (await getCollection('projects')).sort(
 					{
 						projects.map((project) => (
 							<li>
-								<a href={project.data.url} target="_blank" rel="noopener noreferrer">
+								<a
+									class="project-link"
+									href={project.data.url}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
 									{project.data.heroImage && (
 										<Image width={240} height={180} src={project.data.heroImage} alt="" />
 									)}
@@ -98,6 +127,14 @@ const projects = (await getCollection('projects')).sort(
 										</p>
 									</div>
 								</a>
+								<div class="meta">
+									<StatusDot status={project.data.status} />
+									{project.data.updates && project.data.updates.length > 0 && (
+										<a class="see-updates" href={`${import.meta.env.BASE_URL}projects/${project.id}/`}>
+											See updates →
+										</a>
+									)}
+								</div>
 							</li>
 						))
 					}

@@ -1,0 +1,134 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import StatusDot from '../../components/StatusDot.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.id },
+		props: project,
+	}));
+}
+
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props;
+const { title, description, url, status, updates } = project.data;
+
+const sortedUpdates = (updates ?? [])
+	.slice()
+	.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			body {
+				background: #faf9f7;
+			}
+			main {
+				width: 720px;
+			}
+			.back-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				margin-bottom: 1.5rem;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			.back-link:hover {
+				color: rgb(var(--accent));
+			}
+			.status-row {
+				margin-bottom: 1rem;
+			}
+			.description {
+				color: rgb(var(--gray-dark));
+			}
+			.visit-link {
+				display: inline-block;
+				margin-bottom: 2.5rem;
+				color: rgb(var(--accent));
+			}
+			h3 {
+				margin-bottom: 1.5rem;
+			}
+			.no-updates {
+				color: rgb(var(--gray));
+			}
+			ol.timeline {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			ol.timeline li {
+				position: relative;
+				padding: 0 0 1.75rem 1.5rem;
+				border-left: 1px solid rgb(var(--gray-light));
+			}
+			ol.timeline li:last-child {
+				padding-bottom: 0;
+				border-left-color: transparent;
+			}
+			ol.timeline li::before {
+				content: '';
+				position: absolute;
+				left: -4.5px;
+				top: 0.35rem;
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: rgb(var(--accent));
+			}
+			ol.timeline .entry-date {
+				margin: 0 0 0.25rem;
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+			}
+			ol.timeline .entry-note {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<a class="back-link" href={`${import.meta.env.BASE_URL}projects/`}>← Back to projects</a>
+			<h1>{title}</h1>
+			<div class="status-row">
+				<StatusDot status={status} />
+			</div>
+			<p class="description">{description}</p>
+			<a class="visit-link" href={url} target="_blank" rel="noopener noreferrer">
+				Visit project ↗
+			</a>
+
+			<h3>Updates</h3>
+			{
+				sortedUpdates.length > 0 ? (
+					<ol class="timeline">
+						{sortedUpdates.map((entry) => (
+							<li>
+								<p class="entry-date">
+									<FormattedDate date={entry.date} />
+								</p>
+								<p class="entry-note">{entry.note}</p>
+							</li>
+						))}
+					</ol>
+				) : (
+					<p class="no-updates">No updates yet.</p>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

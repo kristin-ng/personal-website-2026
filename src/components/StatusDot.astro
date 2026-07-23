@@ -1,0 +1,44 @@
+---
+interface Props {
+	status: 'building' | 'completed' | 'abandoned';
+}
+
+const { status } = Astro.props;
+
+const labels: Record<Props['status'], string> = {
+	building: 'Building',
+	completed: 'Completed',
+	abandoned: 'Abandoned',
+};
+---
+
+<span class={`status status-${status}`}>
+	<span class="dot" aria-hidden="true"></span>
+	{labels[status]}
+</span>
+
+<style>
+	.status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+		flex-shrink: 0;
+	}
+	.dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+	.status-building .dot {
+		background: rgb(var(--status-building));
+	}
+	.status-completed .dot {
+		background: rgb(var(--status-completed));
+	}
+	.status-abandoned .dot {
+		background: rgb(var(--status-abandoned));
+	}
+</style>

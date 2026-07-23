@@ -29,6 +29,15 @@ const projects = defineCollection({
 			pubDate: z.coerce.date(),
 			url: z.string().url(),
 			heroImage: z.optional(image()),
+			status: z.enum(['building', 'completed', 'abandoned']),
+			updates: z
+				.array(
+					z.object({
+						date: z.coerce.date(),
+						note: z.string(),
+					}),
+				)
+				.optional(),
 		}),
 });
 
